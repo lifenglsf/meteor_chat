@@ -1,0 +1,56 @@
+<template name="login">
+{{>sAlert}}
+<form name="login" id="login" class="form-horizontal">
+	<div class="form-group">
+		<label for="username" class="control-label col-sm-2">姓名</label>
+		<div class="col-sm-10">
+			<input type="text" name="username" id="username" placeholder="请输入姓名">
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="password" class="control-label col-sm-2">密码</label>
+		<div class="col-sm-10">
+			<input type="password" name="password" id="password">
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<input type="submit" value="登陆">
+		</div>
+	</div>
+</form>
+</template>
+<template name="reg">
+	<form name="reg" id="reg" class="form-horizontal">
+		<div class="form-group">
+			<label for="username" class="control-label col-sm-2">姓名</label>
+			<div class="col-sm-10">
+				<input type="text" name="username" id="username" placeholder="请输入姓名">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="nickname" class="control-label col-sm-2">昵称</label>
+			<div class="col-sm-10">
+				<input type="text" name="nickname" id="nickname">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="password" class="control-label col-sm-2">密码</label>
+			<div class="col-sm-10">
+				<input type="password" name="password" id="password">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="repassword" class="control-label col-sm-2">确认密码</label>
+			<div class="col-sm-10">
+				<input type="password" name="repassword" id="repassword">
+			</div>
+
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<input type="submit" value="注册">
+			</div>
+		</div>
+	</form>
+</template>

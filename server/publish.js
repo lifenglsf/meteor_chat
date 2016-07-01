@@ -1,14 +1,12 @@
-Meteor.publish("friends", function () {
-	userid = this.userId;
-  return Meteor.users.find({friends:{$exists:true}});
-});
-
-Meteor.publish('group',function(){
+Meteor.publish('groups',function(){
 	userid = this.userId;
 	return group.find({$or:[{owner:userid,member:userid}]});
 })
 
-Meteor.publish('history',function(){
+Meteor.publish('chatlogs',function(){
 	userid = this.userId;
-	return history.find({$or:[{from:userid,to:userid}]});
+	return chatlog.find({$or:[{from:userid,to:userid}]});
+})
+Meteor.publish('allusers',function(){
+	return Meteor.users.find({});
 })

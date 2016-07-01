@@ -1,9 +1,13 @@
+Router.configure({
+	layoutTemplate:'mainLayout'
+})
+
 Router.route('/login',function(){
 	userId = Meteor.userId();
 	if(userId){
 		Router.go('home');
 	}else{
-		this.render('login');
+		BlazeLayout.render('mainLayout', {main: "login" });
 	}
 })
 Router.route('/',function(){
@@ -14,7 +18,8 @@ Router.route('/register',function(){
 	if(userId){
 		Router.go('home');
 	}else{
-		this.render('reg');
+		BlazeLayout.render('mainLayout', {main: "reg" });
+		//this.render('reg');
 	}
 })
 Router.route('/home',{
@@ -22,17 +27,13 @@ Router.route('/home',{
 		if(this.ready){
 			userId = Meteor.userId();
 			if(userId){
-				this.render('home');
+				BlazeLayout.render('mainLayout', {main: "home" });
 			}else{
 				Router.go('login');
 			}
+		}else{
+			this.render('Loading');
 		}
-	},
-	"before":function(){
-		console.log('wait')
-		this.subscribe('group');
-		this.subscribe('chatlog')
-		this.next();
 	},
 	"data":function(){
 		curuser  = Meteor.user();
@@ -42,7 +43,6 @@ Router.route('/home',{
 				 friends = curuser.friends;
 			}
 		}
-		console.log(friends);
 		groups = group.find().fetch();
 		chatlogs = chatlog.find().fetch()
 		return {
@@ -56,9 +56,34 @@ Router.route('/changepassword',{
 	'action':function(){
 	userId = Meteor.userId();
 		if(userId){
-			this.render('password');
+			BlazeLayout.render('mainLayout', {main: "password" });
 		}else{
 			Router.go('login');
 		}
 	}
 })
+
+Router.route('/addgroup',{
+	'action':function(){
+	userId = Meteor.userId();
+		if(userId){
+			BlazeLayout.render('mainLayout', {main: "addGroup" });
+		}else{
+			Router.go('login');
+		}
+	}
+})
+
+Router.route('/addfriends',{
+	'action':function(){
+		Session.set('friendssearch','');
+		userId = Meteor.userId();
+		if(userId){
+			BlazeLayout.render('mainLayout', {main: "addFriend" });
+		}else{
+			Router.go('login');
+		}
+	}
+})
+
+

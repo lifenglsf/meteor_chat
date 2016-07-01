@@ -17,18 +17,20 @@ Meteor.methods({
 	      return {'error':1,'msg':'用户未登陆'};
 	    }
 	},
-	'users.checkpasswordbyquery':function(password){
-		var user = Meteor.users.findOne({_id:this.userId,password:password});
-		console.log(this.userId,password);
-		if(user){
-			return true;
-		}else{
-			return false;
-		}
-	},
 	'users.changepassword':function(password){
 		r = Accounts.setPassword(this.userId,password,{logout:false});
 		console.log(r);
 		return r;
+	},
+	'useres.create':function(info){
+		console.log(info);
+		id = Accounts.createUser(info);
+		console.log(id);
+		if(id){
+			Roles.addUsersToRoles(id, 'user');
+			return {'error':0};
+		}else{
+			return {error:1};
+		}
 	}
 })

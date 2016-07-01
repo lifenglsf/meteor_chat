@@ -20,14 +20,22 @@ Template.login.events({
 Template.reg.events({
 'submit form'(event){
 	event.preventDefault();
-	var username = event.target.username.value;
-	var nickname = event.target.nickname.value;
-	var password = event.target.password.value;
-	Accounts.createUser({username:username,password:password,profile:{nickname:nickname}},function(error){
-		if(error){
+	info = {};
+	info['username'] = event.target.username.value;
+	info['password'] = event.target.password.value;
+	info['profile'] = {};
+	info['profile']['nickname'] = event.target.nickname.value;
+
+	Meteor.apply('useres.create',[info],function(err,res){
+		if(err){
 			sAlert.error('注册失败',{position:'bottom-left'});
 		}else{
-			Router.go('home');
+			if(_.has(res,'error') && res.error){
+				sAlert.error('注册失败',{position:'bottom-left'});
+			}else{
+				Router.go('home');
+			}
+			
 		}
 	})
 }

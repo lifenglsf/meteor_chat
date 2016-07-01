@@ -20,7 +20,11 @@ Template.home.events({
 	}
 })
 Template.home.onCreated(function () {
-	console.log('created')
+	/*Tracker.autorun(function(){
+		Meteor.subscribe('groups');
+		Meteor.subscribe('chatlogs');
+		Meteor.subscribe('allusers');
+	})*/
 })
 
 Template.home.onRendered(function(){

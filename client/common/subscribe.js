@@ -1,4 +1,5 @@
 Tracker.autorun(function () {
-  Meteor.subscribe("friends");
+  Meteor.subscribe("chatlogs");
   Meteor.subscribe("group");
+  Meteor.subscribe('allusers');
 });

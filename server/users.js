@@ -24,6 +24,7 @@ Meteor.methods({
 	},
 	'useres.create':function(info){
 		console.log(info);
+		info.roles='user';
 		id = Accounts.createUser(info);
 		console.log(id);
 		if(id){
@@ -32,5 +33,16 @@ Meteor.methods({
 		}else{
 			return {error:1};
 		}
+	},
+	'users.modifyremark':function(id,remark){
+		currentuserid = this.userId;
+		friend = Meteor.user().friend;
+		_.each(friend,function(val,key){
+			if(val.id == id){
+				friend[key]['remark'] = remark;
+			}
+		});
+		//console.log(friend);
+		Meteor.users.update({_id:userid,'friend.id':id},{$set:{friend:friend}})
 	}
 })

@@ -9,7 +9,7 @@
         <ul class="list-group">
           {{#if friends}}
           {{#each friends}}
-          <li class="list-group-item" data-id="{{_id}}" title="点击和{{username}}聊天">{{username}}</li>
+          <li class="list-group-item friends-list" data-id="{{id}}" title="点击和{{username}}聊天">{{username}}</li>
           {{/each}}
           {{else}}
           暂无好友
@@ -22,9 +22,9 @@
 			<a class="btn btn-primary" role="button" data-toggle="collapse" href="#chatHistory" aria-expanded="false" aria-controls="collapseExample" title="点击展开">历史聊天好友</a>
       <div id="chatHistory" class="panel-collapse collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading1" aria-expanded="false" style="height: 0px;">
         <ul class="list-group">
-          {{#if logs}}
-          {{#each logs}}
-          <li class="list-group-item" data-id="{{_id}}" title="点击和{{username}}聊天">{{username}}</li>
+          {{#if historychatfriends}}
+          {{#each historychatfriends}}
+          <li class="list-group-item" data-id="{{_id}}">{{username}}</li>
           {{/each}}
           {{else}}
           暂无历史聊天好友
@@ -35,7 +35,7 @@
 	<div class="col-xs-4">
 		<h1>我的群组</h1>
      <ul class="list-group">
-          {{#if group}}
+          {{#if groups}}
           {{#each groups}}
           <li class="list-group-item">{{groupname}}</li>
           {{/each}}

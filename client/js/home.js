@@ -1,5 +1,6 @@
 Template.home.events({
 	'click .ops'(event){
+		console.log(this)
 		event.preventDefault();
 		operate = event.target.attributes['data-op'].value;
 		switch(operate){
@@ -17,6 +18,51 @@ Template.home.events({
 				break;
 		}
 		console.log(event.target)
+	},
+	'click .friends-list':function(event,template){
+		event.preventDefault();
+		id = event.target.dataset.id;
+		Router.go('/chattoperson/'+id);
+	}
+});
+Template.home.helpers({
+	friends:function(){
+		curuser  = Meteor.user();
+		friends = [];
+		if(curuser){
+			if(_.has(curuser,'friend')){
+				 friends = curuser.friend;
+			}
+		}
+		return friends;
+
+	},
+	groups:function(){
+		groups = group.find().fetch();
+		return groups;
+	},
+	historychatfriends:function(){
+		historychatfriends = [];
+		ids = [];
+		chatlogs = chatlog.find({}).fetch();
+		_.each(chatlogs,function(val,key){
+			if(val.from != Meteor.userId()){
+				if(_.indexOf(ids,val.from) ==-1){
+					ids.push(val.from);
+					historychatfriends.push({_id:val.from,username:val.fromusername});
+				}
+				
+			}
+			if(val.to != Meteor.userId()){
+				if(_.indexOf(ids,val.to) == -1){
+					ids.push(val.to);
+					historychatfriends.push({_id:val.to,username:val.tousername});
+				}
+				
+			}
+		})
+		_.uniq(historychatfriends);
+		return historychatfriends;
 	}
 })
 Template.home.onCreated(function () {
@@ -28,6 +74,7 @@ Template.home.onCreated(function () {
 })
 
 Template.home.onRendered(function(){
+
 	console.log('rendered');
 })
 Template.password.events({

@@ -1,0 +1,23 @@
+<template name="chattoperson">
+{{>sAlert}}
+	<div class="row" >
+	<div class="form-group col-xs-6" style="height:200px;border:1px solid #eeeeee">
+		{{#each logs}}
+		{{#if isowner}}
+		<div class="owner"><span style="color:blue;">{{fromusername}}</span>:{{content}}</div>
+		{{else}}
+		<div class="person" style="text-align:right"><span style="color:blue;">{{fromusername}}</span>:{{content}}</div>
+		{{/if}}
+		{{/each}}
+		</div>
+	</div>
+	<div style="height:5px" class="clearfix"></div>
+	<div class="row"  >
+		<div class="form-group col-xs-6" style="border:1px solid #000000;padding-top:5px;">
+		<textarea id="message" name="message" placeholder="请输入聊天内容" cols="80" rows="10"></textarea>
+		<div>
+		<button id="send" name="send" class="btn btn-primary">发送</button>
+		</div>
+		</div>
+	</div>
+</template>

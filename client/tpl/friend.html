@@ -1,4 +1,5 @@
 <template name="addFriend">
+		{{>sAlert}}
 		<form class="form-inline" name="add" id="add">
 		  <div class="form-group">
 		    <div class="input-group">
@@ -20,11 +21,14 @@
 			<tr>
 				<td>{{username}}</td>
 				<td>{{profile.nickname}}</td>
-				<td><button data-id="{{_id}}">加好友</button></td>
+				<td><button data-id="{{_id}}" class="addFriends">加好友</button></td>
 			</tr>
 			{{/each}}
 		</table>
 	</div>
 	</div>
-		{{/if}}
+	{{else}}
+	暂无成员
+	{{/if}}
+	
 </template>

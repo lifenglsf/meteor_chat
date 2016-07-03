@@ -1,0 +1,12 @@
+<template name="header">
+	<div class="app-nav">
+		<ul class="nav nav-tabs">
+			<li role="presentation"><a href="/home">home</a></li>
+			<li role="presentation"><a href="/user">好友管理</a></li>
+			<li role="presentation"><a href="/groups">群组管理</a></li>
+			{{#if isInRole 'admin'}}
+			<li role="presentation"><a href="/admin/user">用户列表</a></li>
+			{{/if}}
+		</ul>
+	</div>
+</template>

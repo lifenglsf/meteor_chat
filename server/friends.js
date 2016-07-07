@@ -1,7 +1,6 @@
 Meteor.methods({
 	'friends.add':function(id){
 		friend = Meteor.users.findOne({_id:id});
-		console.log(id,friend);
 		if(!friend){
 			return false;
 		}else{

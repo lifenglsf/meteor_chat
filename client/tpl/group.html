@@ -35,3 +35,36 @@
 		</div>
 	</form>
 </template>
+<template name="grouplist">
+	<div class="row">
+		<div class="col-xs-6">
+			<table class="table table-responsive">
+				<thead>
+					<tr>
+						<th>群组名称</th>
+						<th>群组创建者</th>
+						<th>群组创建时间</th>
+						<th>群组人数</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each grouplist}}
+					<tr>
+						<td>{{groupname}}</td>
+						<td>{{ownername}}</td>
+						<td>{{dateFormat}}</td>
+						<td>{{nums}}</td>
+					</tr>
+					{{/each}}
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="3">
+							{{>pagination}}
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+	</div>
+	</div>
+</template>

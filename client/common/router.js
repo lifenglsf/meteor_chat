@@ -93,6 +93,23 @@ Router.route('/user',{
 			Router.go('login');
 		}
 	}
+});
+Router.route('/groups/:page?',{
+	action:function(){
+		userId = Meteor.userId();
+		if(userId){
+			console.log(this.params.page)
+			if(this.params.page == undefined){
+				page = 1;
+			}else{
+				page = this.params.page;
+			}
+			BlazeLayout.render('mainLayout',{main:'grouplist',params:{page:page}});
+		}else{
+			Router.go('login');
+		}
+	},
+	name:'usergroups'
 })
 
 

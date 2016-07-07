@@ -116,4 +116,37 @@ Template.addGroup.events({
 
 		}
 	}
+});
+Template.grouplist.onCreated(function(){
+	Meteor.subscribe('groups');
+})
+Template.grouplist.helpers({
+	grouplist:function(){
+		page = this.page;
+		count = group.find({}).count();
+		pagesize = 10;
+		pagenum = Math.ceil(count/pagesize);
+		if(page<=1){
+			page=1;
+		}
+		if(page>=pagenum){
+			page= pagenum;
+		}
+		skip = (page-1)*pagesize;
+		userid = Meteor.userId();
+		r = group.find({},{sort:{createAt:-1},skip:skip,limit:pagesize,transform(obj){
+			if(_.has(obj,'member')){
+				obj.nums = obj.member.length+1;
+			} else{
+				obj.nums = 1;
+			}
+			return obj;
+		}}).fetch();
+		console.log(r);
+		return r;
+	},
+	dateFormat:function(date){
+		return moment(date).format('YYYY-MM-DD');
+	}
+
 })

@@ -38,7 +38,7 @@ Template.home.helpers({
 
 	},
 	groups:function(){
-		groups = group.find().fetch();
+		groups = group.find({},{sort:{createAt:-1},skip:0,limit:10}).fetch();
 		return groups;
 	},
 	historychatfriends:function(){
@@ -73,10 +73,6 @@ Template.home.onCreated(function () {
 	})*/
 })
 
-Template.home.onRendered(function(){
-
-	console.log('rendered');
-})
 Template.password.events({
 	'click #back'(event){
 		Router.go('home');

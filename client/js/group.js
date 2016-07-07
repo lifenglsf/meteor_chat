@@ -135,6 +135,7 @@ Template.grouplist.helpers({
 		skip = (page-1)*pagesize;
 		userid = Meteor.userId();
 		r = group.find({},{sort:{createAt:-1},skip:skip,limit:pagesize,transform(obj){
+
 			if(_.has(obj,'member')){
 				obj.nums = obj.member.length+1;
 			} else{
@@ -142,7 +143,7 @@ Template.grouplist.helpers({
 			}
 			return obj;
 		}}).fetch();
-		console.log(r);
+
 		return r;
 	},
 	dateFormat:function(date){

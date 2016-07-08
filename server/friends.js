@@ -1,15 +1,20 @@
 Meteor.methods({
 	'friends.add':function(id){
-		friend = Meteor.users.findOne({_id:id});
-		if(!friend){
-			return false;
-		}else{
-			updator = {id:id,username:friend.username};
-			Meteor.users.update({_id:this.userId},{$addToSet:{friend:updator}});
-			updators = {id:this.userId,username:Meteor.user().username}
-			Meteor.users.update({_id:id},{$addToSet:{friend:updators}});
+			currentuser = Meteor.user();
+			if(!currentuser){
+				return false
+			}else{
+				user = Meteor.users.findOne({_id:id});
+			if(!friends.findOne({ownerid:this.userId,'friend.id':id})){
+				friends.insert({ownerid:this.userId,friend:{id:id,username:user.username}});
+			}
+
+			if(!friends.findOne({ownerid:id,'friend.id':this.userId})){
+				friends.insert({ownerid:id,friend:{id:this.userId,username:currentuser.username}});
+			}
 			return true;
-		}
+			}
+			
 		
 	}
 })

@@ -23,11 +23,11 @@ Template.chattoperson.events({
 				}else{
 					if(!res){
 						sAlert.error('消息发送失败',{position:'bottom-left'});
+					}else{
+						template.$('#message').val('')
 					}
 				}
 			})
 		}
-		
-		console.log(to);
 	}
 });

@@ -3,4 +3,5 @@ Tracker.autorun(function () {
   Meteor.subscribe("groups");
   Meteor.subscribe('allusers');
   Meteor.subscribe('roles');
+   Meteor.subscribe('allfriends');
 });

@@ -36,13 +36,18 @@ Meteor.methods({
 	},
 	'users.modifyremark':function(id,remark){
 		currentuserid = this.userId;
-		friend = Meteor.user().friend;
-		_.each(friend,function(val,key){
-			if(val.id == id){
-				friend[key]['remark'] = remark;
-			}
-		});
-		//console.log(friend);
-		Meteor.users.update({_id:userid,'friend.id':id},{$set:{friend:friend}})
+		//friend = friends.fineOne({ownerid:currentuserid,'friend.id':id});
+		console.log(currentuserid,id);
+		console.log(friends.findOne({ownerid:currentuserid,'friend.id':id}))
+		friends.update({ownerid:currentuserid,'friend.id':id},{$set:{'friend.remark':remark}})
+	},
+	'users.delete':function(id){
+		user = Meteor.users.findOne({_id:id});
+		if(user){
+			Meteor.users.update({_id:id},{$set:{isdelete:1}});
+			return true;
+		}else{
+			return false;
+		}
 	}
 })

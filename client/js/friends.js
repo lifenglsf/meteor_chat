@@ -28,15 +28,17 @@ Template.addFriend.helpers({
 	searchlist:function(){
 		name = Session.get('friendssearch');
 		res = [];
+		friend = friends.find({}).fetch();
 		currentuser = Meteor.user();
 		ids = [];
 		if(currentuser){
 			ids.push(Meteor.userId());
-		if(_.has(currentuser,'friend')){
-			_.each(currentuser.friend,function(val,key){
-				ids.push(val.id);
+			_.each(friend,function(val,key){
+				if(_.has(val,'friend')){
+						ids.push(val.friend.id);
+				}
 			})
-		}
+			
 		}
 		console.log(ids);
 		if(name){

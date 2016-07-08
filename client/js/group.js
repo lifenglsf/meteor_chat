@@ -146,6 +146,11 @@ Template.grouplist.helpers({
 
 		return r;
 	},
+	pagerdata:function(){
+		count = group.find({}).count();
+		routename = "usergroups";
+		return {'count':count,'routename':routename};
+	},
 	dateFormat:function(date){
 		return moment(date).format('YYYY-MM-DD');
 	}

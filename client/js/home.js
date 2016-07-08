@@ -28,13 +28,12 @@ Template.home.events({
 Template.home.helpers({
 	friends:function(){
 		curuser  = Meteor.user();
-		friends = [];
+		friend = [];
 		if(curuser){
-			if(_.has(curuser,'friend')){
-				 friends = curuser.friend;
-			}
+			friend =friends.find({},{sort:{createAt:-1},skip:0,limit:10}).fetch({})
 		}
-		return friends;
+		console.log(friend);
+		return friend;
 
 	},
 	groups:function(){

@@ -1,4 +1,4 @@
-<template name="userlist">
+<template name="adminuserlist">
 {{sAlert}}
 	<table class="table table-responsive">
 		<thead>
@@ -7,17 +7,17 @@
 					姓名
 				</th>
 				<th>昵称</th>
-				<th>备注</th>
+				<th>状态</th>
 				<th>操作</th>
 			</tr>
 		</thead>
 		<tbody>
 			{{#each userlist}}
 				<tr>
-					<td>{{friend.username}}</td>
-					<td>{{friend.nickname}}</td>
-					<td>{{#if friend.remark}}{{friend.remark}}{{else}}暂无备注{{/if}}</td>
-					<td><a href="/user/del/{{friend.id}}">删除</a>|<a href="#" data-id="{{friend.id}}" data-remark="{{friend.remark}}" data-toggle="modal" class="showmodal">备注</a></td>
+					<td>{{username}}</td>
+					<td>{{profile.nickname}}</td>
+					<td>{{#if isdelete}}已删除{{else}}正常{{/if}}</td>
+					<td><a href="/admin/user/del/{{id}}">删除</a></td>
 				</tr>
 			{{/each}}
 		</tbody>

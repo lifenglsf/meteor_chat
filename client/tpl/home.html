@@ -9,7 +9,7 @@
         <ul class="list-group">
           {{#if friends}}
           {{#each friends}}
-          <li class="list-group-item friends-list" data-id="{{id}}" title="点击和{{username}}聊天">{{username}}</li>
+          <li class="list-group-item friends-list" data-id="{{friend.id}}" title="点击和{{friend.username}}聊天">{{friend.username}}</li>
           {{/each}}
           {{else}}
           暂无好友

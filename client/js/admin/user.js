@@ -1,28 +1,33 @@
-Template.userlist.onCreated(function(){
+Template.adminuserlist.onCreated(function(){
 	Meteor.subscribe('allusers');
 });
-Template.userlist.helpers({
+Template.adminuserlist.helpers({
 	'userlist':function(){
 		currentuser = Meteor.user();
-		friend = [];
-		friend = friends.find({}).fetch();
+		user = [];
 		if(currentuser){
-			_.each(friend,function(val,key){
-					user = Meteor.users.findOne({_id:val.friend.id});
-					console.log(user);
-					friend[key]['friend']['nickname'] = user.profile.nickname;
-				
-			})
-		}
-		return friend;
+			page = this.page;
+			count = Meteor.users.find({}).count();
+			pagesize = 10;
+			pagenum = Math.ceil(count/pagesize);
+			if(page<=1){
+				page=1;
+			}
+			if(page>=pagenum){
+				page= pagenum;
+			}
+			skip = (page-1)*pagesize;
+				return Meteor.users.find({},{sort:{createAt:-1},skip:skip,limit:pagesize})
+			}
+		return [];
 	},
 	pagerdata:function(){
 		count = friends.find({}).count();
-		routename = "myfriends";
+		routename = "adminuserlist";
 		return {'count':count,'routename':routename};
 	}
 });
-Template.userlist.events({
+Template.adminuserlist.events({
 	'click .showmodal':function(event,template){
 		event.preventDefault();
 		remark = event.target.dataset.remark;

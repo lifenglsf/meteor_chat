@@ -7,7 +7,7 @@ Template.adminuserlist.helpers({
 		user = [];
 		if(currentuser){
 			page = this.page;
-			count = Meteor.users.find({}).count();
+			count = Meteor.users.find({roles:'user'}).count();
 			pagesize = 10;
 			pagenum = Math.ceil(count/pagesize);
 			if(page<=1){
@@ -17,12 +17,12 @@ Template.adminuserlist.helpers({
 				page= pagenum;
 			}
 			skip = (page-1)*pagesize;
-				return Meteor.users.find({},{sort:{createAt:-1},skip:skip,limit:pagesize})
+				return Meteor.users.find({roles:'user'},{sort:{createAt:-1},skip:skip,limit:pagesize})
 			}
 		return [];
 	},
 	pagerdata:function(){
-		count = friends.find({}).count();
+		count = Meteor.users.find({roles:'user'}).count();
 		routename = "adminuserlist";
 		return {'count':count,'routename':routename};
 	}

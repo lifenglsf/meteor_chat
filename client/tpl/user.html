@@ -1,5 +1,5 @@
 <template name="userlist">
-{{sAlert}}
+{{>sAlert}}
 	<table class="table table-responsive">
 		<thead>
 			<tr>
@@ -14,10 +14,10 @@
 		<tbody>
 			{{#each userlist}}
 				<tr>
-					<td>{{friend.username}}</td>
-					<td>{{friend.nickname}}</td>
-					<td>{{#if friend.remark}}{{friend.remark}}{{else}}暂无备注{{/if}}</td>
-					<td><a href="/user/del/{{friend.id}}">删除</a>|<a href="#" data-id="{{friend.id}}" data-remark="{{friend.remark}}" data-toggle="modal" class="showmodal">备注</a></td>
+					<td>{{username}}</td>
+					<td>{{nickname}}</td>
+					<td>{{#if remark}}{{remark}}{{else}}暂无备注{{/if}}</td>
+					<td><a href="#" class="delfriends" data-id="{{id}}">删除</a>|<a href="#" data-id="{{id}}" data-remark="{{remark}}" data-toggle="modal" class="showmodal">备注</a>|<a href="/chattoperson/{{id}}">聊天</a></td>
 				</tr>
 			{{/each}}
 		</tbody>

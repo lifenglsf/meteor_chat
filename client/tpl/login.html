@@ -16,6 +16,8 @@
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">
 			<input type="submit" value="登陆">
+							<a href="/register">注册</a>
+
 		</div>
 	</div>
 </form>
@@ -24,9 +26,9 @@
 {{>sAlert}}
 	<form name="reg" id="reg" class="form-horizontal">
 		<div class="form-group">
-			<label for="username" class="control-label col-sm-2">姓名</label>
+			<label for="username" class="control-label col-sm-2">用户名</label>
 			<div class="col-sm-10">
-				<input type="text" name="username" id="username" placeholder="请输入姓名">
+				<input type="text" name="username" id="username" placeholder="请输入用户名" required="" minlength="2">
 			</div>
 		</div>
 		<div class="form-group">
@@ -38,13 +40,25 @@
 		<div class="form-group">
 			<label for="password" class="control-label col-sm-2">密码</label>
 			<div class="col-sm-10">
-				<input type="password" name="password" id="password">
+				<input type="password" name="password" id="password" minlength="6" required="" maxlength="16">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="repassword" class="control-label col-sm-2">确认密码</label>
 			<div class="col-sm-10">
-				<input type="password" name="repassword" id="repassword">
+				<input type="password" name="repassword" id="repassword" minlength="6" required="" maxlength="15">
+			</div>
+
+		</div>
+		<div class="form-group">
+			<label for="depart" class="control-label col-sm-2">部门</label>
+			<div class="col-sm-10">
+				<select name="depart" id="depart">
+					<option value="">请选择部门</option>
+					{{#each departlist}}
+					<option value="{{_id}}">{{departname}}</option>
+					{{/each}}
+				</select>
 			</div>
 
 		</div>

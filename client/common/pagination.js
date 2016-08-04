@@ -3,7 +3,7 @@ Template.pagination.helpers({
 		//console.log();
 		data= Template[this.templatename].__helpers.get('pagerdata')();
 		page = this.page;
-		limit = 1;
+		limit = 10;
 		count = data.count;
 		pagenum = Math.ceil(count/limit);
 		if(pagenum<=1){

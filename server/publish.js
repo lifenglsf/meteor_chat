@@ -1,12 +1,12 @@
 Meteor.publish('groups',function(){
 	userid = this.userId;
-	return group.find({$or:[{owner:userid},{"member.id":userid}]});
+	return cgroup.find({$or:[{owner:userid},{"member.id":userid}]});
 })
 
-Meteor.publish('chatlogs',function(){
-	userid = this.userId;
+Meteor.publish('chatlogs',function(userid){
+	console.log(userid);
 	//Post.find({"user_id":user_id}, {skip: 0, limit: 5});
-	r= chatlog.find({$or:[{from:userid},{to:userid}]},{sort:{createAt:-1}});
+	r= cchatlog.find({$or:[{from:userid},{to:userid}]});
 	return r;
 })
 Meteor.publish('allusers',function(){
@@ -16,5 +16,8 @@ Meteor.publish('roles',function(){
 	return Roles.getAllRoles();
 })
 Meteor.publish('allfriends',function(){
-	return friends.find({ownerid:this.userId});
+	return cfriends.find({ownerid:this.userId});
+});
+Meteor.publish('alldeparts',function(){
+	return cdepart.find({});
 })

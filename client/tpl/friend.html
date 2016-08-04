@@ -8,6 +8,7 @@
 		  </div>
 		  <button type="submit" class="btn btn-primary">搜索</button>
 		</form>
+		{{#if Template.subscriptionsReady}}
 		{{#if searchlist}}
 		<div class="row">
 			<div class="col-xs-2">
@@ -29,6 +30,9 @@
 	</div>
 	{{else}}
 	暂无成员
+	{{/if}}
+	{{else}}
+	loading
 	{{/if}}
 	
 </template>

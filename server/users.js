@@ -38,8 +38,8 @@ Meteor.methods({
 		currentuserid = this.userId;
 		//friend = friends.fineOne({ownerid:currentuserid,'friend.id':id});
 		console.log(currentuserid,id);
-		console.log(friends.findOne({ownerid:currentuserid,'friend.id':id}))
-		friends.update({ownerid:currentuserid,'friend.id':id},{$set:{'friend.remark':remark}})
+		console.log(cfriends.findOne({ownerid:currentuserid,'friend.id':id}))
+		cfriends.update({ownerid:currentuserid,'friend.id':id},{$set:{'friend.remark':remark}})
 	},
 	'users.delete':function(id){
 		user = Meteor.users.findOne({_id:id});

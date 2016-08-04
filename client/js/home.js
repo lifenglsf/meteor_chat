@@ -30,20 +30,20 @@ Template.home.helpers({
 		curuser  = Meteor.user();
 		friend = [];
 		if(curuser){
-			friend =friends.find({},{sort:{createAt:-1},skip:0,limit:10}).fetch({})
+			friend =cfriends.find({},{sort:{createAt:-1},skip:0,limit:10}).fetch({})
 		}
 		console.log(friend);
 		return friend;
 
 	},
 	groups:function(){
-		groups = group.find({},{sort:{createAt:-1},skip:0,limit:10}).fetch();
+		groups = cgroup.find({},{sort:{createAt:-1},skip:0,limit:10}).fetch();
 		return groups;
 	},
 	historychatfriends:function(){
 		historychatfriends = [];
 		ids = [];
-		chatlogs = chatlog.find({}).fetch();
+		chatlogs = cchatlog.find({}).fetch();
 		_.each(chatlogs,function(val,key){
 			if(val.from != Meteor.userId()){
 				if(_.indexOf(ids,val.from) ==-1){
@@ -62,14 +62,21 @@ Template.home.helpers({
 		})
 		_.uniq(historychatfriends);
 		return historychatfriends;
+	},
+	username:function(){
+		return Meteor.user().username;
 	}
 })
 Template.home.onCreated(function () {
-	/*Tracker.autorun(function(){
+	Tracker.autorun(function(){
 		Meteor.subscribe('groups');
 		Meteor.subscribe('chatlogs');
 		Meteor.subscribe('allusers');
-	})*/
+		Meteor.subscribe('allfriends');
+	})
+})
+Template.home.onRendered(function(){
+	console.log('rendered');
 })
 
 Template.password.events({
@@ -120,10 +127,17 @@ Template.password.events({
 	},
 	'blur #npassword'(event,template){
 		event.preventDefault();
+		template.$('#subs').attr('disabled',false);
 		ovalue = template.$('#opassword').val();
 		currentval = event.target.value
 		if(currentval === ""){
 			sAlert.error('新密码不能为空',{position:'bottom-left'});
+			template.$('#subs').attr('disabled',true);
+			return;
+		}
+		if(currentval === ovalue){
+			sAlert.error('原密码和新密码不能一致',{position:'bottom-left'});
+			template.$('#subs').attr('disabled',true);
 			return;
 		}
 		
@@ -131,10 +145,12 @@ Template.password.events({
 	},
 	'blur #nrepassword'(event,template){
 		event.preventDefault();
+		template.$('#subs').attr('disabled',false);
 		nvalue = template.$('#npassword').val();
 		currentval = event.target.value
 		if(currentval === ""){
 			sAlert.error('新确认密码不能为空',{position:'bottom-left'});
+			template.$('#subs').attr('disabled',true);
 			return;
 		}
 		if(currentval !== nvalue){

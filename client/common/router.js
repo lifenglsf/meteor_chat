@@ -117,13 +117,39 @@ Router.route('/groups/:page?',{
 	},
 	name:'usergroups'
 });
+Router.route('/group/edit/:_id',{
+	action:function(){
+
+	}
+});
+Router.route('/group/del/:_id',{
+	action:function(){
+
+	}
+});
+Router.route('/group/setmanage/:_id',{
+	action:function(){
+
+	}
+});
+Router.route('/group/chat/:_id',{
+	action:function(){
+		userId = Meteor.userId();
+		if(userId){
+			groupid = this.params._id;
+			BlazeLayout.render('mainLayout',{main:'groupchat',params:{groupid:groupid}});
+		}else{
+			Router.go('login');
+		}
+	}
+})
 Router.route('/admin/user/:page?',{
 	action:function(){
 		userId = Meteor.userId();
 		if(userId){
 			console.log(this.params.page)
 			if(this.params.page == undefined){
-				page = 10;
+				page = 1;
 			}else{
 				page = this.params.page;
 			}
@@ -160,6 +186,81 @@ Router.route('/admin/user/del/:_id',{
 			Router.go('login');
 		}
 	},
+});
+
+Router.route('/admin/depart/list/:page?',{
+	action:function(){
+		userId = Meteor.userId();
+		if(userId){
+			if(Roles.userIsInRole(Meteor.userId(), ['admin'])){
+				if(this.params.page == undefined){
+					page = 1;
+				}else{
+					page = this.params.page;
+				}
+				BlazeLayout.render('mainLayout',{main:'admindepartlist',params:{page:page,templatename:'admindepartlist'}});
+			}else{
+				BlazeLayout.render('mainLayout',{main:'403'});
+			}
+				
+		}else{
+			Router.go('login');
+		}
+	},
+	name:'admindepartlist'
+});
+Router.route('/admin/depart/add',{
+	action:function(){
+		userId = Meteor.userId();
+		if(Roles.userIsInRole(userId, ['admin'])){
+			if(userId){
+				BlazeLayout.render('mainLayout',{main:'admindepartadd'});
+			}else{
+				Router.go('login');
+			}
+		}else{
+			BlazeLayout.render('mainLayout',{main:'403'});
+		}
+	}
+});
+Router.route('/admin/depart/edit/:_id',{
+	action:function(){
+		userId = Meteor.userId();
+		if(Roles.userIsInRole(userId, ['admin'])){
+			if(userId){
+				id = this.params._id;
+				BlazeLayout.render('mainLayout',{main:'admindepartedit',params:{id:id}});
+			}else{
+				Router.go('login');
+			}
+		}else{
+			BlazeLayout.render('mainLayout',{main:'403'});
+		}
+	}
+});
+Router.route('/admin/depart/del/:_id',{
+	action:function(){
+		userId = Meteor.userId();
+		if(Roles.userIsInRole(userId, ['admin'])){
+			if(userId){
+				id = this.params._id;
+				Meteor.apply('depart.delete',[id],function(err,res){
+					if(err){
+						console.log(err);
+						BlazeLayout.render('mainLayout',{main:'403'});
+					}else if(res){
+						BlazeLayout.render('mainLayout',{main:'success'});
+					}else{
+						BlazeLayout.render('mainLayout',{main:'403'});
+					}
+				})
+			}else{
+				Router.go('login');
+			}
+		}else{
+			BlazeLayout.render('mainLayout',{main:'403'});
+		}
+	}
 })
 
 

@@ -5,7 +5,7 @@ Meteor.methods({
 			console.log(1);
 			user = Meteor.user();
 			username = user.username
-			id = group.insert({owner:this.userId,groupname:groupname,member:member,ownername:username,createAt:new Date()});
+			id = cgroup.insert({owner:this.userId,groupname:groupname,member:member,ownername:username,createAt:new Date()});
 			if(id){
 				console.log(2);
 				return true;

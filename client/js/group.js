@@ -1,11 +1,13 @@
+Template.addGroup.onCreated(function(){
+	Meteor.subscribe('allusers');
+	Meteor.subscribe('allfriends');
+})
 Template.addGroup.helpers({
 	friends:function(){
 		curuser  = Meteor.user();
 		friends = [];
 		if(curuser){
-			if(_.has(curuser,'friend')){
-				 friends = curuser.friend;
-			}
+			friends = cfriends.find({}).fetch();
 		}
 		return friends;
 	}
@@ -117,13 +119,101 @@ Template.addGroup.events({
 		}
 	}
 });
+Template.groupchat.onCreated(function(){
+	Meteor.subscribe('groups');
+	Meteor.subscribe('allusers');
+	Meteor.subscribe('chatlogs',this.data.groupid);
+});
+/*Template.groupchat.onRendered(function(){
+	template = this;
+	this.autorun(function(c){
+		console.log(template._allSubsReady)
+		if(template.subscriptionsReady()){
+			console.log(cchatlog.find().count())
+		curgroup = cgroup.findOne({_id:template.data.groupid});
+		console.log(curgroup);
+		if(!curgroup){
+			console.log('abc');
+			BlazeLayout.render('mainLayout',{main:'datanotfound'});
+		}
+		}
+		
+	})
+})*/
+Template.groupchat.helpers({
+	logs:function(){
+			if (Template.instance().subscriptionsReady()){
+				curuserid = Meteor.userId();
+				if(curuserid){
+					curgroup = cgroup.findOne({_id:this.groupid});
+					console.log(curgroup);
+					//if(!curgroup){
+					//	BlazeLayout.render('mainLayout',{main:'datanotfound'});
+					//}else{
+						return cchatlog.find({type:'group'},{transform:function(obj){
+							obj.isowner = false;
+							if(obj.from == Meteor.userId()){
+								obj.isowner= true;
+							}
+							return obj;
+						}}).fetch();
+//
+						
+					
+					
+				}else{
+					Router.go('login');
+				}
+			}
+			
+				
+		
+	}
+});
+Template.groupchat.events({
+		'click #send':function(event,template){
+		event.preventDefault();
+		console.log(template.data)
+		message = $.trim($('#summernote').summernote('code'));
+		if(message == ""){
+
+		}else{
+			/*if(message.length>6000){
+				sAlert.error('聊天内容不能超过6000字',{position:"bottom-left"});
+				return;
+			}else{*/
+				to = template.data.groupid;
+				Meteor.apply('chatlog.createGroupChat',[message,to],function(err,res){
+					if(err){
+						sAlert.error('消息发送失败',{position:'bottom-left'});
+					}else{
+						if(!res){
+							sAlert.error('消息发送失败',{position:'bottom-left'});
+						}else{
+							$('#summernote').summernote('reset');
+							Meteor.setTimeout(function(){
+								scrolltops = $('#chatlogs').prop('scrollHeight');
+								if(scrolltops){
+									console.log('a');
+									$('#chatlogs').scrollTop(scrolltops)
+								}
+							},500)
+							
+						}
+					}
+				})
+			//}
+			
+		}
+	}
+})
 Template.grouplist.onCreated(function(){
 	Meteor.subscribe('groups');
 })
 Template.grouplist.helpers({
 	grouplist:function(){
 		page = this.page;
-		count = group.find({}).count();
+		count = cgroup.find({}).count();
 		pagesize = 10;
 		pagenum = Math.ceil(count/pagesize);
 		if(page<=1){
@@ -134,7 +224,7 @@ Template.grouplist.helpers({
 		}
 		skip = (page-1)*pagesize;
 		userid = Meteor.userId();
-		r = group.find({},{sort:{createAt:-1},skip:skip,limit:pagesize,transform(obj){
+		r = cgroup.find({},{sort:{createAt:-1},skip:skip,limit:pagesize,transform(obj){
 
 			if(_.has(obj,'member')){
 				obj.nums = obj.member.length+1;
@@ -147,7 +237,7 @@ Template.grouplist.helpers({
 		return r;
 	},
 	pagerdata:function(){
-		count = group.find({}).count();
+		count = cgroup.find({}).count();
 		routename = "usergroups";
 		return {'count':count,'routename':routename};
 	},

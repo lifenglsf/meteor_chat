@@ -1,5 +1,6 @@
 Template.home.events({
 	'click .ops'(event){
+		console.log(this)
 		event.preventDefault();
 		operate = event.target.attributes['data-op'].value;
 		switch(operate){
@@ -17,15 +18,67 @@ Template.home.events({
 				break;
 		}
 		console.log(event.target)
+	},
+	'click .friends-list':function(event,template){
+		event.preventDefault();
+		id = event.target.dataset.id;
+		Router.go('/chattoperson/'+id);
+	}
+});
+Template.home.helpers({
+	friends:function(){
+		curuser  = Meteor.user();
+		friend = [];
+		if(curuser){
+			friend =cfriends.find({isdelete:{$ne:1}},{sort:{createAt:-1},skip:0,limit:10}).fetch({})
+		}
+		console.log(friend);
+		return friend;
+
+	},
+	groups:function(){
+		groups = cgroup.find({},{sort:{createAt:-1},skip:0,limit:10}).fetch();
+		return groups;
+	},
+	historychatfriends:function(){
+		historychatfriends = [];
+		ids = [];
+		chatlogs = cchatlog.find({}).fetch();
+		_.each(chatlogs,function(val,key){
+			if(val.from != Meteor.userId()){
+				if(_.indexOf(ids,val.from) ==-1){
+					ids.push(val.from);
+					historychatfriends.push({_id:val.from,username:val.fromusername});
+				}
+
+			}
+			if(val.to != Meteor.userId()){
+				if(_.indexOf(ids,val.to) == -1){
+					ids.push(val.to);
+					historychatfriends.push({_id:val.to,username:val.tousername});
+				}
+
+			}
+		})
+		_.uniq(historychatfriends);
+		return historychatfriends;
+	},
+	username:function(){
+		return Meteor.user().username;
 	}
 })
 Template.home.onCreated(function () {
-	console.log('created')
+	Tracker.autorun(function(){
+		Meteor.subscribe('groups');
+		Meteor.subscribe('chatlogs');
+		Meteor.subscribe('allusers');
+		Meteor.subscribe('allfriends');
+	})
 })
-
 Template.home.onRendered(function(){
 	console.log('rendered');
 })
+
 Template.password.events({
 	'click #back'(event){
 		Router.go('home');
@@ -49,7 +102,7 @@ Template.password.events({
 					$('#subs').attr('disabled',false);
 
 				}
-				
+
 			}
 
 		})
@@ -74,21 +127,30 @@ Template.password.events({
 	},
 	'blur #npassword'(event,template){
 		event.preventDefault();
+		template.$('#subs').attr('disabled',false);
 		ovalue = template.$('#opassword').val();
 		currentval = event.target.value
 		if(currentval === ""){
 			sAlert.error('新密码不能为空',{position:'bottom-left'});
+			template.$('#subs').attr('disabled',true);
 			return;
 		}
-		
+		if(currentval === ovalue){
+			sAlert.error('原密码和新密码不能一致',{position:'bottom-left'});
+			template.$('#subs').attr('disabled',true);
+			return;
+		}
+
 		template.$('#subs').attr('disabled',false);
 	},
 	'blur #nrepassword'(event,template){
 		event.preventDefault();
+		template.$('#subs').attr('disabled',false);
 		nvalue = template.$('#npassword').val();
 		currentval = event.target.value
 		if(currentval === ""){
 			sAlert.error('新确认密码不能为空',{position:'bottom-left'});
+			template.$('#subs').attr('disabled',true);
 			return;
 		}
 		if(currentval !== nvalue){
@@ -150,14 +212,14 @@ Template.password.events({
 						sAlert.error('密码修改失败',{position:'bottom-left'});
 						return;
 					}
-						var sAlertId = sAlert.success('密码修改成功', {onClose: function() {Router.go('home')}});
-						sAlert.close(sAlertId);
+					var sAlertId = sAlert.success('密码修改成功', {position:"bottom-left",onClose: function() {Router.go('home')}});
+					//sAlert.close(sAlertId);
 				})
 			}
-			 
+
 		});
 
-		
+
 
 	}
 })

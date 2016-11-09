@@ -1,0 +1,38 @@
+<template name="pagination">
+{{#if pager.pages}}
+<nav>
+  <ul class="pagination">
+    <li>
+    {{#if pager.isfirst}}
+     <a href="{{pager.firsturl}}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    {{else}}
+     <a href="{{pager.prevurl}}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    {{/if}}
+     
+    </li>
+    {{#each pager.pages}}
+    {{#if current}}
+    <li class="active"><a href="{{url}}">{{index}}</a></li>
+    {{else}}
+    <li><a href="{{url}}">{{index}}</a></li>
+    {{/if}}
+    {{/each}}
+    <li>
+    {{#if pager.islast}}
+      <a href="{{pager.lasturl}}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+       {{else}}
+       <a href="{{pager.nexturl}}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+      {{/if}}
+    </li>
+  </ul>
+</nav>
+{{/if}}
+  </template>

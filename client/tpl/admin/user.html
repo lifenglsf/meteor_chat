@@ -1,0 +1,30 @@
+<template name="adminuserlist">
+	<table class="table table-responsive">
+		<thead>
+			<tr>
+				<th>
+					姓名
+				</th>
+				<th>昵称</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each userlist}}
+				<tr>
+					<td>{{username}}</td>
+					<td>{{profile.nickname}}</td>
+					<td>{{#if isdelete}}已删除{{else}}正常{{/if}}</td>
+					<td>{{#if isdelete}}无{{else}}<a  class="deluser" data-id="{{_id}}" href="#">删除</a>{{/if}}</td>
+				</tr>
+			{{/each}}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="4">{{>pagination}}</td>
+			</tr>
+		</tfoot>
+	</table>
+
+</template>

@@ -1,0 +1,38 @@
+<template name="addFriend">
+		{{>sAlert}}
+		<form class="form-inline" name="add" id="add">
+		  <div class="form-group">
+		    <div class="input-group">
+		      <input type="text" class="form-control" name="names" id="names" placeholder="请输入用户名或昵称">
+		    </div>
+		  </div>
+		  <button type="submit" class="btn btn-primary">搜索</button>
+		</form>
+		{{#if Template.subscriptionsReady}}
+		{{#if searchlist}}
+		<div class="row">
+			<div class="col-xs-2">
+		<table class="table table-condensed">
+			<tr>
+				<th>用户名</th>
+				<th>昵称</th>
+				<th>操作</th>
+			</tr>
+			{{#each searchlist}}
+			<tr>
+				<td>{{username}}</td>
+				<td>{{profile.nickname}}</td>
+				<td><button data-id="{{_id}}" class="addFriends">加好友</button></td>
+			</tr>
+			{{/each}}
+		</table>
+	</div>
+	</div>
+	{{else}}
+	暂无成员
+	{{/if}}
+	{{else}}
+	loading
+	{{/if}}
+	
+</template>

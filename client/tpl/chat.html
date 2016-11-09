@@ -1,0 +1,29 @@
+<template name="chattoperson">
+<h1>正在和{{touser.username}}聊天</h1>
+{{>sAlert}}
+	<div class="row" >
+	<div class="form-group col-xs-6" id="chatlogs" style="height:200px;border:1px solid #eeeeee;overflow-y: auto">
+		{{#if logs}}
+		{{#each logs}}
+		{{#if isowner}}
+		<div class="owner"><span style="color:red;">{{fromusername}}</span>:{{{content}}}</div>
+		{{else}}
+		<div class="person" style="text-align:right"><span style="color:blue;">{{fromusername}}</span>:{{{content}}}</div>
+		{{/if}}
+		{{/each}}
+		{{else}}
+		暂无聊天记录
+		{{/if}}
+		</div>
+	</div>
+	<div style="height:5px" class="clearfix"></div>
+	<div class="row"  >
+		<div class="form-group col-xs-6" style="border:1px solid #000000;padding-top:5px;">
+		{{>editor}}
+		<!-- <textarea id="message" name="message" placeholder="请输入聊天内容" cols="80" rows="10"></textarea> -->
+		<div>
+		<button id="send" name="send" class="btn btn-primary">发送</button>
+		</div>
+		</div>
+	</div>
+</template>

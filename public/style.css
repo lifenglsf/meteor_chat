@@ -1,0 +1,9 @@
+.friends-list,.choose-list{
+	cursor: pointer;
+	color: blue
+}
+.selected,.delselected{
+	color: black;
+	cursor: inherit;
+}
+

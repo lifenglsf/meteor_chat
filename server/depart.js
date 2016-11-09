@@ -9,13 +9,20 @@ Meteor.methods({
 		}
 	},
 	'depart.delete':function(id){
-		departs = cdepart.findOne({_id:id});
-		if(departs){
-			cdepart.update({_id:id},{$set:{isdelete:1}});
-			return true;
+		isexists = Meteor.users.find({'profile.depart':id}).count();
+		console.log(isexists);
+		if(isexists){
+			return {error:false,msg:'该部门已被使用，不能删除'};
 		}else{
-			return false;
+			departs = cdepart.findOne({_id:id});
+			if(departs){
+				cdepart.update({_id:id},{$set:{isdelete:1}});
+				return {error:true,msg:''};
+			}else{
+				return {error:false,msg:'非法操作'};
+			}
 		}
+		
 	},
 	'depart.update':function(id,departname){
 		departs = cdepart.findOne({_id:id});

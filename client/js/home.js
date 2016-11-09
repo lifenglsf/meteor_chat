@@ -30,7 +30,7 @@ Template.home.helpers({
 		curuser  = Meteor.user();
 		friend = [];
 		if(curuser){
-			friend =cfriends.find({},{sort:{createAt:-1},skip:0,limit:10}).fetch({})
+			friend =cfriends.find({isdelete:{$ne:1}},{sort:{createAt:-1},skip:0,limit:10}).fetch({})
 		}
 		console.log(friend);
 		return friend;
@@ -50,14 +50,14 @@ Template.home.helpers({
 					ids.push(val.from);
 					historychatfriends.push({_id:val.from,username:val.fromusername});
 				}
-				
+
 			}
 			if(val.to != Meteor.userId()){
 				if(_.indexOf(ids,val.to) == -1){
 					ids.push(val.to);
 					historychatfriends.push({_id:val.to,username:val.tousername});
 				}
-				
+
 			}
 		})
 		_.uniq(historychatfriends);
@@ -102,7 +102,7 @@ Template.password.events({
 					$('#subs').attr('disabled',false);
 
 				}
-				
+
 			}
 
 		})
@@ -140,7 +140,7 @@ Template.password.events({
 			template.$('#subs').attr('disabled',true);
 			return;
 		}
-		
+
 		template.$('#subs').attr('disabled',false);
 	},
 	'blur #nrepassword'(event,template){
@@ -212,14 +212,14 @@ Template.password.events({
 						sAlert.error('密码修改失败',{position:'bottom-left'});
 						return;
 					}
-						var sAlertId = sAlert.success('密码修改成功', {onClose: function() {Router.go('home')}});
-						sAlert.close(sAlertId);
+					var sAlertId = sAlert.success('密码修改成功', {position:"bottom-left",onClose: function() {Router.go('home')}});
+					//sAlert.close(sAlertId);
 				})
 			}
-			 
+
 		});
 
-		
+
 
 	}
 })

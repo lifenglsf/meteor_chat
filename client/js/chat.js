@@ -1,3 +1,5 @@
+//{{> Template.dynamic template=main data=params}}
+
 var autoScrollingIsActive = false;
 /* reactive var here */
 scrollToBottom = function scrollToBottom (duration) {

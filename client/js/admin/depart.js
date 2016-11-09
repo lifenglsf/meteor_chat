@@ -3,7 +3,7 @@ Template.admindepartlist.onCreated(function(){
 });
 Template.admindepartlist.helpers({
 	pagerdata:function(){
-		count = depart.find({}).count();
+		count = cdepart.find({}).count();
 		routename = "admindepartlist";
 		return {'count':count,'routename':routename};
 	},
@@ -32,7 +32,7 @@ Template.admindepartlist.events({
 		event.preventDefault();
 		console.log('eee');
 		id = event.target.dataset['id'];
-		if(confirm('去人要删除这个部门吗')){
+		if(confirm('确认要删除这个部门吗')){
 			Router.go('/admin/depart/del/'+id);
 		}
 	}

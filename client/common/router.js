@@ -34,7 +34,7 @@ Router.route('/home',{
 				Router.go('login');
 			}
 		}else{
-			this.render('Loading');
+			//this.render('Loading');
 		}
 	}
 })
@@ -100,6 +100,23 @@ Router.route('/user/:page?',{
 	},
 	name:'myfriends'
 });
+Router.route('/user/del/:_id',{
+	action:function(){
+		id = this.params._id;
+		Meteor.apply('friends.delete',[id],function(err,res){
+			console.log(err,res)
+			if(err){
+				console.log(err);
+				BlazeLayout.render('mainLayout',{main:'403'});
+			}else if(res.error){
+				BlazeLayout.render('mainLayout',{main:'success'});
+			}else{
+				console.log(res.msg);
+				BlazeLayout.render('mainLayout',{main:'errmsg',params:{errmsg:res.msg}});
+			}
+		})
+	}
+})
 Router.route('/groups/:page?',{
 	action:function(){
 		userId = Meteor.userId();
@@ -119,28 +136,98 @@ Router.route('/groups/:page?',{
 });
 Router.route('/group/edit/:_id',{
 	action:function(){
+		if (this.ready()) {
+			console.log('ready');
+            userId = Meteor.userId();
+			if(userId){
+				groupid = this.params._id;
+				currentgroup = cgroup.findOne({_id:groupid});
+				if(!currentgroup){
+					BlazeLayout.render('mainLayout',{main:'datanotfound'});
+				}else{
+					administrator = [];
+					administrator.push(currentgroup.owner);
+					if(_.has(currentgroup,'manager')){
+						_.each(currentgroup.manager,function(val,key){
+							administrator.push(val.id);
+						})
 
+					}
+					if(_.indexOf(administrator,userId) == -1){
+						BlazeLayout.render('mainLayout',{main:'403'});
+					}else{
+						BlazeLayout.render('mainLayout',{main:'groupedit',params:{groupid:groupid}});
+					}
+
+				}
+
+			}else{
+				Router.go('login');
+			}
+        }
+
+	},
+	subscriptions:function(){
+		this.subscribe('groups').wait();
+		this.subscribe('allusers').wait();
+		this.subscribe('allfriends').wait();
 	}
 });
 Router.route('/group/del/:_id',{
 	action:function(){
+		groupid = this.params._id;
+		Meteor.apply('groups.delete',[groupid],function(err,res){
+			if(err){
+				console.log(err);
+				BlazeLayout.render('mainLayout',{main:'403'});
+			}else if(res == -1){
+				Router.go('login');
+			}else if(res ==1){
+				BlazeLayout.render('mainLayout',{main:'success'});
+			}else if(res == -2){
+				BlazeLayout.render('mainLayout',{main:'datanotfound'});
+			}else{
+				BlazeLayout.render('mainLayout',{main:'403'});
+			}
+		})
 
 	}
 });
 Router.route('/group/setmanage/:_id',{
 	action:function(){
+		groupid = this.params._id;
+		BlazeLayout.render('mainLayout',{main:'groupmanager',params:{groupid:groupid}});
 
+	},
+	subscriptions:function(){
+		this.subscribe('groups').wait();
+		this.subscribe('allusers').wait();
+		this.subscribe('allfriends').wait();
 	}
 });
 Router.route('/group/chat/:_id',{
 	action:function(){
-		userId = Meteor.userId();
-		if(userId){
-			groupid = this.params._id;
-			BlazeLayout.render('mainLayout',{main:'groupchat',params:{groupid:groupid}});
-		}else{
-			Router.go('login');
-		}
+		if (this.ready()) {
+			console.log('ready');
+            userId = Meteor.userId();
+			if(userId){
+				groupid = this.params._id;
+				if(!cgroup.findOne({_id:groupid})){
+					BlazeLayout.render('mainLayout',{main:'datanotfound'});
+				}else{
+					BlazeLayout.render('mainLayout',{main:'groupchat',params:{groupid:groupid}});
+				}
+
+			}else{
+				Router.go('login');
+			}
+        }
+
+	},
+	subscriptions:function(){
+		this.subscribe('groups').wait();
+		this.subscribe('allusers').wait();
+		this.subscribe('chatlogs',this.params._id).wait();
 	}
 })
 Router.route('/admin/user/:page?',{
@@ -163,6 +250,7 @@ Router.route('/admin/user/:page?',{
 
 Router.route('/admin/user/del/:_id',{
 	action:function(){
+		console.log('================')
 		user = Meteor.user();
 		if(user){
 			if(Roles.userIsInRole(user, 'admin')){
@@ -177,15 +265,17 @@ Router.route('/admin/user/del/:_id',{
 						BlazeLayout.render('mainLayout',{main:'403'});
 					}
 				})
-				
+
 			}else{
 				BlazeLayout.render('mainLayout',{main:'403'});
 			}
-			
+
 		}else{
+			console.log('bbbbccccc')
 			Router.go('login');
 		}
 	},
+	name:"admindeleteuser"
 });
 
 Router.route('/admin/depart/list/:page?',{
@@ -202,7 +292,7 @@ Router.route('/admin/depart/list/:page?',{
 			}else{
 				BlazeLayout.render('mainLayout',{main:'403'});
 			}
-				
+
 		}else{
 			Router.go('login');
 		}
@@ -242,22 +332,26 @@ Router.route('/admin/depart/del/:_id',{
 	action:function(){
 		userId = Meteor.userId();
 		if(Roles.userIsInRole(userId, ['admin'])){
+			console.log('abc');
 			if(userId){
 				id = this.params._id;
 				Meteor.apply('depart.delete',[id],function(err,res){
+					console.log(res);
 					if(err){
 						console.log(err);
 						BlazeLayout.render('mainLayout',{main:'403'});
-					}else if(res){
+					}else if(res.error){
 						BlazeLayout.render('mainLayout',{main:'success'});
 					}else{
-						BlazeLayout.render('mainLayout',{main:'403'});
+						console.log(res.msg);
+						BlazeLayout.render('mainLayout',{main:'errmsg',params:{errmsg:res.msg}});
 					}
 				})
 			}else{
 				Router.go('login');
 			}
 		}else{
+			console.log('def');
 			BlazeLayout.render('mainLayout',{main:'403'});
 		}
 	}

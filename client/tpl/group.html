@@ -49,19 +49,19 @@
 					</tr>
 				</thead>
 				<tbody>
-					{{#each grouplist}}
+					{{#each grouplists}}
 					<tr>
 						<td>{{groupname}}</td>
 						<td>{{{ownername}}}</td>
 						<td>{{dateFormat}}</td>
 						<td>{{nums}}</td>
-						<td><a href="/group/edit/{{_id}}">编辑</a>|<a href="/group/setmanage/{{_id}}">设置管理员</a>|<a href="/group/del/{{_id}}">删除</a>|<a href="/group/chat/{{_id}}">聊天</a></td>
+						<td>{{#if isadmin}}<a href="/group/edit/{{_id}}">编辑</a>|<a href="/group/setmanage/{{_id}}">设置管理员</a>|{{/if}}{{#if isowner}}<a href="/group/del/{{_id}}">删除</a>|{{/if}}<a href="/group/chat/{{_id}}">聊天</a></td>
 					</tr>
 					{{/each}}
 				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="3">
+						<td colspan="5">
 							{{>pagination}}
 						</td>
 					</tr>
@@ -88,6 +88,21 @@
 		{{/if}}
 		{{/if}}
 		</div>
+		<div class="form-group col-xs-6" id="groupmembers" style="border:1px solid #eeeeee;overflow-y: auto">
+		{{#if Template.subscriptionsReady}}
+		{{#each members}}
+		{{#if ismember}}
+			<div class="member"><span>成员</span>:{{{username}}}</div>
+		{{else}}
+			{{#if ismanager}}
+			<div class="person"><span style="color:red;">管理员</span>:{{{username}}}</div>
+			{{else}}
+			<div class="person"><span style="color:blue;">群主</span>:{{{username}}}</div>
+			{{/if}}
+		{{/if}}
+		{{/each}}
+		{{/if}}
+		</div>
 	</div>
 	<div style="height:5px" class="clearfix"></div>
 	<div class="row"  >
@@ -99,4 +114,78 @@
 		</div>
 		</div>
 	</div>
+</template>
+<template name="groupedit">
+	{{>sAlert}}
+	<form name="addGroup" id="addGroup" class="form-horizontal">
+		<div class="form-group">
+			<label for="groupname" class="control-label col-sm-2">群组名称</label>
+			<div class="col-sm-10">
+				<input type="text" name="groupname" id="groupname" placeholder="请输入群组名称" value="{{group.groupname}}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="members" class="control-label col-sm-2">群组成员</label>
+			<div class="col-sm-2">
+				好友列表<br/>
+				<ul id="friends-lists">
+					{{#each friends}}
+					<li class="friends-list" data-id="{{friend.id}}">{{friend.username}}</li>
+					{{/each}}
+				</ul>
+			</div>
+			<div class="col-sm-2">
+				<button id="add">添加&gt;&gt;</button><br/><br/>
+				<button id="del">&lt;&lt;删除</button>
+			</div>
+			<div class="col-sm-2">
+				已选成员<br/>
+				<ul id="choose-lists">
+					{{#each group.member}}
+					<li class="choose-list" data-id="{{id}}">{{username}}</li>
+					{{/each}}
+				</ul>
+			</div>
+		</div>
+		<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<input type="submit" name="sub" id="sub" value="编辑">
+				</div>
+		</div>
+	</form>
+</template>
+<template name="groupmanager">
+	{{>sAlert}}
+	<form name="addGroup" id="addGroup" class="form-horizontal">
+		<div class="form-group">
+			<label for="members" class="control-label col-sm-2">群组成员列表</label>
+			<div class="col-sm-2">
+				<ul id="memberlist">
+					{{#each group.member}}
+					{{#if ismember}}
+					<li class="friends-list" data-id="{{id}}">{{username}}</li>
+					{{/if}}
+					{{/each}}
+				</ul>
+			</div>
+			<div class="col-sm-2">
+				<button id="add">添加&gt;&gt;</button><br/><br/>
+				<button id="del">&lt;&lt;删除</button>
+			</div>
+			<div class="col-sm-2">
+				已选管理员<br/>
+				<ul id="managerlist">
+					{{#each group.manager}}
+					<li class="choose-list" data-id="{{id}}">{{username}}</li>
+					{{/each}}
+
+				</ul>
+			</div>
+		</div>
+		<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<input type="submit" name="sub" id="sub" value="修改">
+				</div>
+		</div>
+	</form>
 </template>

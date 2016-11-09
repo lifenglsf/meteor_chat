@@ -16,7 +16,7 @@
 					<td>{{username}}</td>
 					<td>{{profile.nickname}}</td>
 					<td>{{#if isdelete}}已删除{{else}}正常{{/if}}</td>
-					<td>{{#if isdelete}}无{{else}}<a href="/admin/user/del/{{id}}">删除</a>{{/if}}</td>
+					<td>{{#if isdelete}}无{{else}}<a  class="deluser" data-id="{{_id}}" href="#">删除</a>{{/if}}</td>
 				</tr>
 			{{/each}}
 		</tbody>

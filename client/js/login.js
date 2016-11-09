@@ -1,5 +1,3 @@
-import { Meteor } from 'meteor/meteor';
-import '../tpl/login.html';
 Template.reg.onCreated(function(){
 	console.log('reg created');
 	Meteor.subscribe('alldeparts');
@@ -15,23 +13,37 @@ Template.login.events({
 	var username=event.target.username.value;
 	password = event.target.password.value;
 	console.log(username,password);
-	Meteor.loginWithPassword(username,password,function(error){
-		console.log(error)
-		if(error){
-			if(error.reason == 'Incorrect password'){
-				message = "密码错误";
-			}else if(error.reason == 'User not found'){
-				message = "用户不存在"
-			}else if(error.reason == 'User has no password set'){
-				message = "用户未设置密码"
-			}else{
-				message = "用户名或密码错误";
-			}
-			sAlert.error(message,{position:'bottom-left'});
+	Meteor.apply('users.login',[username,password],function(err,res){
+		if(err){
+			sAlert.error("登陆失败",{position:'bottom-left'});
 		}else{
-			Router.go('home');
+			if(res){
+				Meteor.loginWithPassword(username,password,function(error){
+					console.log(error)
+					if(error){
+						if(error.reason == 'Incorrect password'){
+							message = "密码错误";
+						}else if(error.reason == 'User not found'){
+							message = "用户不存在"
+						}else if(error.reason == 'User has no password set'){
+							message = "用户未设置密码"
+						}else{
+							message = "用户名或密码错误";
+						}
+						sAlert.error(message,{position:'bottom-left'});
+					}else{
+						console.log(Meteor.user())
+						//Router.go('home');
+					}
+				})
+			}else{
+				sAlert.error("用户不存在或者已删除",{position:'bottom-left'});
+			}
+			
 		}
+		
 	})
+	
 	
 }
 });

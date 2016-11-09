@@ -3,6 +3,7 @@
 {{>sAlert}}
 	<div class="row" >
 	<div class="form-group col-xs-6" id="chatlogs" style="height:200px;border:1px solid #eeeeee;overflow-y: auto">
+		{{#if logs}}
 		{{#each logs}}
 		{{#if isowner}}
 		<div class="owner"><span style="color:red;">{{fromusername}}</span>:{{{content}}}</div>
@@ -10,6 +11,9 @@
 		<div class="person" style="text-align:right"><span style="color:blue;">{{fromusername}}</span>:{{{content}}}</div>
 		{{/if}}
 		{{/each}}
+		{{else}}
+		暂无聊天记录
+		{{/if}}
 		</div>
 	</div>
 	<div style="height:5px" class="clearfix"></div>

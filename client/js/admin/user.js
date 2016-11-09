@@ -54,5 +54,15 @@ Template.adminuserlist.events({
 			}
 		});
 		$('#myModal').modal('hide');
+	},
+	'click .deluser':function(event,template){
+		event.preventDefault();
+		if(confirm('确认要删除这个用户吗')){
+			//删除好友
+			id = event.target.dataset.id;
+			console.log(id)
+			path = Router.url('admindeleteuser',{_id:id});
+			Router.go(path)
+		}
 	}
 })

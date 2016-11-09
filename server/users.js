@@ -37,14 +37,24 @@ Meteor.methods({
 	'users.modifyremark':function(id,remark){
 		currentuserid = this.userId;
 		//friend = friends.fineOne({ownerid:currentuserid,'friend.id':id});
-		console.log(currentuserid,id);
-		console.log(cfriends.findOne({ownerid:currentuserid,'friend.id':id}))
 		cfriends.update({ownerid:currentuserid,'friend.id':id},{$set:{'friend.remark':remark}})
 	},
 	'users.delete':function(id){
 		user = Meteor.users.findOne({_id:id});
 		if(user){
 			Meteor.users.update({_id:id},{$set:{isdelete:1}});
+			cfriends.update({$or:[{'friend.id':id},{ownerid:id}]},{$set:{isdelete:1}},{multi:true});
+			cgroup.update({},{$pull:{member:{id:id}}},{multi:true});
+			cgroup.update({ownerid:id},{isdelete:1});
+			cchatlog.update({$or:[{from:id},{to:id}]},{$set:{isdelete:1}})
+			return true;
+		}else{
+			return false;
+		}
+	},
+	'users.login':function(username,password){
+		user = Meteor.users.findOne({username:username,isdelete:1});
+		if(!user){
 			return true;
 		}else{
 			return false;

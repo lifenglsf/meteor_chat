@@ -17,16 +17,17 @@ Template.userlist.helpers({
 			page= pagenum;
 		}
 		skip = (page-1)*pagesize;
-		friend = cfriends.find({},{sort:{createAt:-1},skip:skip,limit:pagesize}).fetch();
+		friend = cfriends.find({isdelete:{$ne:1}},{sort:{createAt:-1},skip:skip,limit:pagesize}).fetch();
 		console.log(friend);
 		if(currentuser){
 			_.each(friend,function(val,key){
-				
+
 					myfriend[key] = val.friend;
 					user = Meteor.users.findOne({_id:val.friend.id});
+					console.log(user);
 					myfriend[key]['nickname'] = user.profile.nickname;
-					
-				
+
+
 			})
 		}
 		return myfriend;
@@ -66,12 +67,13 @@ Template.userlist.events({
 				$('#myModal').modal('hide');
 			}
 		});
-		
+
 	},
 	'click .delfriends':function(event,template){
 		event.preventDefault();
+		id = event.target.dataset.id;
 		if(confirm('确认要删除这个好友吗')){
-			//删除好友
+			Router.go('/user/del/'+id);
 		}
 	}
 })
@@ -87,7 +89,7 @@ Template.addFriend.events({
 	'submit form'(event,template){
 		event.preventDefault();
 		name = event.target.names.value;
-		Session.set('friendssearch',name);	
+		Session.set('friendssearch',name);
 	},
 	'click .addFriends'(event,template){
 		event.preventDefault();
@@ -123,7 +125,7 @@ Template.addFriend.helpers({
 						ids.push(val.friend.id);
 				}
 			})
-			
+
 		}
 		console.log(ids);
 		if(name){
